@@ -26,6 +26,7 @@ class Acunetix(object):
         try:
             return json.loads(data)
         except Exception as e:
+            return {}
             raise AXException("JSON_PARSING_ERROR", f"Json Parsing has occured: {e}")
 
     def __send_request(self, method="get", endpoint="", data=None):
@@ -103,3 +104,8 @@ class Acunetix(object):
         }
         print(f"Scanning {target_id} , {scan_profile}")
         return self.__send_request(method="post", endpoint=API_SCAN , data=scan_payload)
+
+    def configure(self, target_id, scan_profile="full_scan", proxy_address="", proxy_port=""):
+
+        configure_payload = {"scan_speed":"fast","login":{"kind":"none"},"ssh_credentials":{"kind":"none"},"default_scanning_profile_id":scan_profiles_list[scan_profile],"sensor":False,"case_sensitive":"no","limit_crawler_scope": True,"excluded_paths":[],"authentication":{"enabled":False},"proxy":{"enabled":True,"protocol":"http","address":proxy_address,"port":proxy_port},"technologies":[],"custom_headers":[],"custom_cookies":[],"debug":False,"restrict_scans_to_import_files":False,"client_certificate_password":"","user_agent":"","client_certificate_url":"","issue_tracker_id":"","excluded_hours_id":"","preseed_mode":""}
+        return self.__send_request(method="patch", endpoint=API_CONFIGURE_TARGET.format(target_id), data=configure_payload)

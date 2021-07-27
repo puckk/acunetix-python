@@ -1,6 +1,7 @@
 API_BASE = "/api/v1/"
 
 API_SCAN = API_BASE + "scans"
+API_CONFIGURE_TARGET = API_BASE + "targets/{}/configuration"
 API_TARGET = API_BASE + "targets"
 
 target_criticality_list = {
